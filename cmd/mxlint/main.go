@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/cinaq/mendix-cli/lint"
-	"github.com/cinaq/mendix-cli/mpr"
+	"github.com/klatter/mendix-cli/lint"
+	"github.com/klatter/mendix-cli/mpr"
 	"github.com/radovskyb/watcher"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

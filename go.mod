@@ -1,4 +1,4 @@
-module github.com/cinaq/mendix-cli
+module github.com/klatter/mendix-cli
 
 go 1.22.0
 
@@ -9,6 +9,7 @@ require (
 	github.com/radovskyb/watcher v1.0.7
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
+	github.com/yargevad/filepathx v1.0.0
 	go.mongodb.org/mongo-driver v1.14.0
 	gopkg.in/yaml.v2 v2.4.0
 )

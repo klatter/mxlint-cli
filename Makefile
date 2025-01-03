@@ -1,12 +1,18 @@
 # Makefile for building the Go CLI application
-
-# The output binary name
 BINARY_NAME=mxlint
 
 # Go related variables
-GOBASE=$(shell pwd)
-GOBIN=$(GOBASE)/bin
-GOPKG=$(GOBASE)/cmd/$(BINARY_NAME)
+ifeq ($(OS),Windows_NT)
+    GOBASE=$(shell cd)
+    RM=del /Q
+    GOBIN=$(GOBASE)\bin
+    GOPKG=$(GOBASE)\cmd\$(BINARY_NAME)
+else
+    GOBASE=$(shell pwd)
+    RM=rm -f
+    GOBIN=$(GOBASE)/bin
+    GOPKG=$(GOBASE)/cmd/$(BINARY_NAME)
+endif
 
 # Go commands
 GOBUILD=go build
@@ -14,8 +20,11 @@ GOCLEAN=go clean
 GOTEST=go test
 GOGET=go get
 
+
 # Build targets
 all: clean deps test build-macos build-windows build-macos-arm64
+
+windows: clean deps test build-windows
 
 # Build for macOS
 build-macos:
@@ -29,13 +38,19 @@ build-macos-arm64:
 # Build for Windows
 build-windows:
 	@echo "Building for Windows amd64..."
-	@GOOS=windows GOARCH=amd64 $(GOBUILD) -o $(GOBIN)/$(BINARY_NAME)-windows-amd64.exe $(GOPKG)
+ifeq ($(OS),Windows_NT)
+	@set GOOS=windows
+	@set GOARCH=amd64
+	@$(GOBUILD) -o $(GOBIN)\$(BINARY_NAME)-windows-amd64.exe $(GOPKG)
+else
+    @GOOS=windows GOARCH=amd64 $(GOBUILD) -o $(GOBIN)/$(BINARY_NAME)-windows-amd64.exe $(GOPKG)
+endif
 
 # Clean up binaries
 clean:
 	@echo "Cleaning..."
 	@$(GOCLEAN)
-	@rm -f $(GOBIN)/$(BINARY_NAME)*
+	@if exist $(GOBIN) $(RM) $(GOBIN)\$(BINARY_NAME)*
 
 # Run tests
 test:
@@ -46,5 +61,3 @@ test:
 deps:
 	@echo "Fetching dependencies"
 	@go mod tidy
-
-.PHONY: all build-macos build-windows clean test deps

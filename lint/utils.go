@@ -2,7 +2,7 @@ package lint
 
 import (
 	"path/filepath"
-
+    "github.com/yargevad/filepathx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -14,7 +14,7 @@ func SetLogger(logger *logrus.Logger) {
 }
 
 func expandPaths(pattern string, workingDirectory string) ([]string, error) {
-	matches, err := filepath.Glob(filepath.Join(workingDirectory, pattern))
+	matches, err := filepathx.Glob(filepath.Join(workingDirectory, pattern))
 	if err != nil {
 		// An error occurred while globbing, return the error.
 		return nil, err
